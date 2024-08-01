@@ -115,6 +115,7 @@ public class ApplicationExitMonitor {
                     eventAttributes.put(AnalyticsAttribute.APP_EXIT_IMPORTANCE_STRING_ATTRIBUTE, getImportanceAsString(exitInfo.getImportance()));
                     eventAttributes.put(AnalyticsAttribute.APP_EXIT_DESCRIPTION_ATTRIBUTE, toValidAttributeValue(exitInfo.getDescription()));
                     eventAttributes.put(AnalyticsAttribute.APP_EXIT_PROCESS_NAME_ATTRIBUTE, toValidAttributeValue(exitInfo.getProcessName()));
+                    eventAttributes.put(AnalyticsAttribute.APP_EXIT_TRACE_ATTRIBUTE, toValidAttributeValue(traceReport));
 
                     // Add fg/bg flag based on inferred importance:
                     switch (exitInfo.getImportance()) {
