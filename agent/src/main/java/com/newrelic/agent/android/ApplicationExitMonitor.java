@@ -13,6 +13,7 @@ import android.app.ApplicationExitInfo;
 import android.content.Context;
 import android.os.Build;
 
+import com.newrelic.agent.android.aei.AEI;
 import com.newrelic.agent.android.analytics.AnalyticsAttribute;
 import com.newrelic.agent.android.analytics.AnalyticsControllerImpl;
 import com.newrelic.agent.android.analytics.AnalyticsEventCategory;
@@ -71,6 +72,9 @@ public class ApplicationExitMonitor {
             // the set may contain more than one report for this package name
             for (ApplicationExitInfo exitInfo : applicationExitInfos) {
                 File artifact = new File(reportsDir, "app-exit-" + exitInfo.getPid() + ".log");
+                if(exitInfo.getReason() == ApplicationExitInfo.REASON_ANR){
+                    AEI aei = new AEI(artifact.getAbsolutePath());
+                }
 
                 // If an artifact for this pid exists, it's been recorded already
                 if (artifact.exists() && (artifact.length() > 0)) {
@@ -87,6 +91,7 @@ public class ApplicationExitMonitor {
 
                     try (OutputStream artifactOs = new FileOutputStream(artifact, false)) {
 
+                        //TODO: this part still gets all the system trace, we need to parse out just stack trace
                         if (null != exitInfo.getTraceInputStream()) {
                             try (InputStream traceIs = exitInfo.getTraceInputStream()) {
                                 traceReport = Streams.slurpString(traceIs);
@@ -115,7 +120,7 @@ public class ApplicationExitMonitor {
                     eventAttributes.put(AnalyticsAttribute.APP_EXIT_IMPORTANCE_STRING_ATTRIBUTE, getImportanceAsString(exitInfo.getImportance()));
                     eventAttributes.put(AnalyticsAttribute.APP_EXIT_DESCRIPTION_ATTRIBUTE, toValidAttributeValue(exitInfo.getDescription()));
                     eventAttributes.put(AnalyticsAttribute.APP_EXIT_PROCESS_NAME_ATTRIBUTE, toValidAttributeValue(exitInfo.getProcessName()));
-                    eventAttributes.put(AnalyticsAttribute.APP_EXIT_TRACE_ATTRIBUTE, toValidAttributeValue(traceReport));
+//                    eventAttributes.put(AnalyticsAttribute.APP_EXIT_TRACE_ATTRIBUTE, toValidAttributeValue(traceReport));
 
                     // Add fg/bg flag based on inferred importance:
                     switch (exitInfo.getImportance()) {

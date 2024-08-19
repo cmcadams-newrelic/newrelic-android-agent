@@ -7,6 +7,7 @@ package com.newrelic.agent.android.payload;
 
 import com.newrelic.agent.android.Agent;
 import com.newrelic.agent.android.AgentConfiguration;
+import com.newrelic.agent.android.aei.AEIReporter;
 import com.newrelic.agent.android.agentdata.AgentDataReporter;
 import com.newrelic.agent.android.crash.CrashReporter;
 import com.newrelic.agent.android.harvest.Harvest;
@@ -92,6 +93,13 @@ public class PayloadController implements HarvestLifecycleAware {
                 log.warn("PayloadController: No payload reporter - payload reporting will be disabled");
             }
 
+            AEIReporter aeiReporter = AEIReporter.initialize(agentConfiguration);
+            if (aeiReporter != null) {
+                aeiReporter.start();
+            } else {
+                log.warn("PayloadController: No AEI reporter - AEI reporting will be disabled");
+            }
+
             Harvest.addHarvestListener(instance.get());
         }
 
@@ -120,6 +128,7 @@ public class PayloadController implements HarvestLifecycleAware {
                     }
                     AgentDataReporter.shutdown();
                     CrashReporter.shutdown();
+                    AEIReporter.shutdown();
 
                 } catch (InterruptedException e) {
                 }
