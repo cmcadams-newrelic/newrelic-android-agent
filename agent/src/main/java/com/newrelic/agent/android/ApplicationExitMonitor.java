@@ -72,9 +72,6 @@ public class ApplicationExitMonitor {
             // the set may contain more than one report for this package name
             for (ApplicationExitInfo exitInfo : applicationExitInfos) {
                 File artifact = new File(reportsDir, "app-exit-" + exitInfo.getPid() + ".log");
-                if(exitInfo.getReason() == ApplicationExitInfo.REASON_ANR){
-                    AEI aei = new AEI(artifact.getAbsolutePath());
-                }
 
                 // If an artifact for this pid exists, it's been recorded already
                 if (artifact.exists() && (artifact.length() > 0)) {
@@ -82,6 +79,10 @@ public class ApplicationExitMonitor {
                     recordsSkipped++;
 
                 } else {
+                    if(exitInfo.getReason() == ApplicationExitInfo.REASON_ANR){
+                        AEI aei = new AEI(artifact.getAbsolutePath());
+                    }
+
                     String traceReport = exitInfo.toString();
 
                     // remove any empty files

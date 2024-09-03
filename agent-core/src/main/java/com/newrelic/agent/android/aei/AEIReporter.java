@@ -76,7 +76,7 @@ public class AEIReporter extends PayloadReporter {
         for(int i = 0; i < listOfAEI.size(); i++) {
             File aeiFile = new File(listOfAEI.get(i));
             String aeiTraceReport = aeifileToString(aeiFile);;
-            reportAEI(aeiTraceReport);
+            reportAEI(aeiTraceReport, i);
         }
     }
 
@@ -99,7 +99,7 @@ public class AEIReporter extends PayloadReporter {
         return str.toString();
     }
 
-    protected Future reportAEI(String aei) {
+    protected Future reportAEI(String aei, int position) {
         final boolean hasValidDataToken = Harvest.getHarvestConfiguration().getDataToken().isValid();
 
             if (hasValidDataToken) {
@@ -123,7 +123,11 @@ public class AEIReporter extends PayloadReporter {
                         @Override
                         public void onResponse(PayloadSender payloadSender) {
                             if (payloadSender.isSuccessfulResponse()) {
-                                //delete AEI here?
+                                //delete AEI here
+                                AEI aei = new AEI();
+                                ArrayList<String> listOfAEI = new ArrayList<>();
+                                listOfAEI = aei.getListOfAEI();
+                                listOfAEI.remove(position);
 
                                 //add supportability metrics
                                 DeviceInformation deviceInformation = Agent.getDeviceInformation();
