@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-package com.newrelic.agent.android.aei;
+package com.newrelic.agent.android.aeitrace;
 
 import com.google.gson.JsonSyntaxException;
 import com.newrelic.agent.android.Agent;
@@ -26,17 +26,40 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class AEIReporter extends PayloadReporter {
-    protected static AtomicReference<AEIReporter> instance = new AtomicReference<>(null);
+public class AEITraceReporter extends PayloadReporter {
+    protected static AtomicReference<AEITraceReporter> instance = new AtomicReference<>(null);
 
-    public static AEIReporter getInstance() {
+    public static AEITraceReporter getInstance() {
         return instance.get();
     }
 
-    public static AEIReporter initialize(AgentConfiguration agentConfiguration) {
-        instance.compareAndSet(null, new AEIReporter(agentConfiguration));
-        Harvest.addHarvestListener(instance.get());
+    public static AEITraceReporter initialize(AgentConfiguration agentConfiguration) {
+        instance.compareAndSet(null, new AEITraceReporter(agentConfiguration));
         return instance.get();
+    }
+
+    protected static boolean isInitialized() {
+        return instance.get() != null;
+    }
+
+    protected AEITraceReporter(AgentConfiguration agentConfiguration) {
+        super(agentConfiguration);
+    }
+
+    @Override
+    public void start() {
+        if (isInitialized()) {
+            Harvest.addHarvestListener(instance.get());
+            isStarted.set(true);
+        } else {
+            log.error("AEITraceReporter: Must initialize PayloadController first.");
+        }
+    }
+
+    @Override
+    protected void stop() {
+        Harvest.removeHarvestListener(instance.get());
+        isStarted.set(false);
     }
 
     public static void shutdown() {
@@ -46,33 +69,10 @@ public class AEIReporter extends PayloadReporter {
         }
     }
 
-    protected static boolean isInitialized() {
-        return instance.get() != null;
-    }
-
-    protected AEIReporter(AgentConfiguration agentConfiguration) {
-        super(agentConfiguration);
-    }
-
-    @Override
-    public void start() {
-        if (isInitialized()) {
-            if (isStarted.compareAndSet(false, true)) {
-
-            }
-        } else {
-            log.error("AEIReporter: Must initialize PayloadController first.");
-        }
-    }
-
-    @Override
-    protected void stop() {
-    }
-
     protected void reportSavedAEI() {
-        AEI aei = new AEI();
+        AEITrace aeiTrace = new AEITrace();
         ArrayList<String> listOfAEI = new ArrayList<>();
-        listOfAEI = aei.getListOfAEI();
+        listOfAEI = aeiTrace.getListOfAEI();
         for(int i = 0; i < listOfAEI.size(); i++) {
             File aeiFile = new File(listOfAEI.get(i));
             String aeiTraceReport = aeifileToString(aeiFile);;
@@ -104,7 +104,7 @@ public class AEIReporter extends PayloadReporter {
 
             if (hasValidDataToken) {
                 if (aei != null) {
-                    final AEISender sender = new AEISender(aei, agentConfiguration);
+                    final AEITraceSender sender = new AEITraceSender(aei, agentConfiguration);
 
                     long aeiSize = aei.toString().getBytes().length;
                     if (aeiSize > Constants.Network.MAX_PAYLOAD_SIZE) {
@@ -114,7 +114,7 @@ public class AEIReporter extends PayloadReporter {
                                 .replace(MetricNames.TAG_DESTINATION, MetricNames.METRIC_DATA_USAGE_COLLECTOR)
                                 .replace(MetricNames.TAG_SUBDESTINATION, "mobile_crash");
                         StatsEngine.notice().inc(name);
-                        //delete AEI here?
+                        //delete AEITrace here?
                         log.error("Unable to upload crashes because payload is larger than 1 MB, crash report is discarded.");
                         return null;
                     }
@@ -123,10 +123,10 @@ public class AEIReporter extends PayloadReporter {
                         @Override
                         public void onResponse(PayloadSender payloadSender) {
                             if (payloadSender.isSuccessfulResponse()) {
-                                //delete AEI here
-                                AEI aei = new AEI();
+                                //delete AEITrace here
+                                AEITrace aeiTrace = new AEITrace();
                                 ArrayList<String> listOfAEI = new ArrayList<>();
-                                listOfAEI = aei.getListOfAEI();
+                                listOfAEI = aeiTrace.getListOfAEI();
                                 listOfAEI.remove(position);
 
                                 //add supportability metrics
@@ -135,32 +135,32 @@ public class AEIReporter extends PayloadReporter {
                                         .replace(MetricNames.TAG_FRAMEWORK, deviceInformation.getApplicationFramework().name())
                                         .replace(MetricNames.TAG_DESTINATION, MetricNames.METRIC_DATA_USAGE_COLLECTOR)
                                         .replace(MetricNames.TAG_SUBDESTINATION, "mobile_crash");
-                                StatsEngine.get().sampleMetricDataUsage(name, aei.toString().getBytes().length, 0);
+                                StatsEngine.get().sampleMetricDataUsage(name, aeiTrace.toString().getBytes().length, 0);
                             } else {
                                 //Offline storage: No network at all, don't send back data
                                 if (FeatureFlag.featureEnabled(FeatureFlag.OfflineStorage)) {
-                                    log.warn("AEIReporter didn't send due to lack of network connection");
+                                    log.warn("AEITraceReporter didn't send due to lack of network connection");
                                 }
                             }
                         }
 
                         @Override
                         public void onException(PayloadSender payloadSender, Exception e) {
-                            log.error("AEIReporter: AEI upload failed: " + e);
+                            log.error("AEITraceReporter: AEITrace upload failed: " + e);
                         }
                     };
 
                     if (!sender.shouldUploadOpportunistically()) {
-                        log.warn("AEIReporter: network is unreachable. AEI will be uploaded on next app launch");
+                        log.warn("AEITraceReporter: network is unreachable. AEITrace will be uploaded on next app launch");
                     }
 
                     return PayloadController.submitPayload(sender, completionHandler);
                 } else {
-                    log.warn("AEIReporter: attempted to report null AEI.");
+                    log.warn("AEITraceReporter: attempted to report null AEITrace.");
                 }
 
             } else {
-                log.warn("AEIReporter: agent has not successfully connected and cannot report AEI.");
+                log.warn("AEITraceReporter: agent has not successfully connected and cannot report AEITrace.");
             }
 
         return null;

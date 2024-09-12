@@ -1,15 +1,15 @@
-package com.newrelic.agent.android.aei;
+package com.newrelic.agent.android.aeitrace;
 
 import java.util.ArrayList;
 
-public class AEI {
+public class AEITrace {
     private static ArrayList<String> listOfAEI = new ArrayList<>();
 
-    public AEI(){
+    public AEITrace(){
         super();
     }
 
-    public AEI(String filePath){
+    public AEITrace(String filePath){
         listOfAEI.add(filePath);
     }
 

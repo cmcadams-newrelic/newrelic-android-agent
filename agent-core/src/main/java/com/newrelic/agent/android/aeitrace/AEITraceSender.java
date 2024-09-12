@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-package com.newrelic.agent.android.aei;
+package com.newrelic.agent.android.aeitrace;
 
 import com.newrelic.agent.android.Agent;
 import com.newrelic.agent.android.AgentConfiguration;
@@ -18,13 +18,13 @@ import java.net.URL;
 
 import javax.net.ssl.HttpsURLConnection;
 
-public class AEISender extends PayloadSender {
+public class AEITraceSender extends PayloadSender {
     public static final int AEI_COLLECTOR_TIMEOUT = 5000; // 5 seconds
     private static final String CRASH_COLLECTOR_PATH = "/mobile_crash";
 
     private final String aei;
 
-    public AEISender(String aei, AgentConfiguration agentConfiguration) {
+    public AEITraceSender(String aei, AgentConfiguration agentConfiguration) {
         super(aei.toString().getBytes(), agentConfiguration);
         this.aei = aei;
     }

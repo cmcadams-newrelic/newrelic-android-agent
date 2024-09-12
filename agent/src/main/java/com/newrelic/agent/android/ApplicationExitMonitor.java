@@ -13,7 +13,7 @@ import android.app.ApplicationExitInfo;
 import android.content.Context;
 import android.os.Build;
 
-import com.newrelic.agent.android.aei.AEI;
+import com.newrelic.agent.android.aeitrace.AEITrace;
 import com.newrelic.agent.android.analytics.AnalyticsAttribute;
 import com.newrelic.agent.android.analytics.AnalyticsControllerImpl;
 import com.newrelic.agent.android.analytics.AnalyticsEventCategory;
@@ -80,7 +80,7 @@ public class ApplicationExitMonitor {
 
                 } else {
                     if(exitInfo.getReason() == ApplicationExitInfo.REASON_ANR){
-                        AEI aei = new AEI(artifact.getAbsolutePath());
+                        AEITrace aeiTrace = new AEITrace(artifact.getAbsolutePath());
                     }
 
                     String traceReport = exitInfo.toString();
@@ -151,7 +151,7 @@ public class ApplicationExitMonitor {
                     StatsEngine.SUPPORTABILITY.sample(MetricNames.SUPPORTABILITY_AEI_SKIPPED, recordsSkipped);
                 }
 
-                log.debug("AEI: inspected " + applicationExitInfos.size() + " records: new[" + recordsVisited + "] existing [" + recordsSkipped + "]");
+                log.debug("AEITrace: inspected " + applicationExitInfos.size() + " records: new[" + recordsVisited + "] existing [" + recordsSkipped + "]");
             }
 
             if (eventsAdded) {
