@@ -79,10 +79,6 @@ public class ApplicationExitMonitor {
                     recordsSkipped++;
 
                 } else {
-                    if(exitInfo.getReason() == ApplicationExitInfo.REASON_ANR){
-                        AEITrace aeiTrace = new AEITrace(artifact.getAbsolutePath());
-                    }
-
                     String traceReport = exitInfo.toString();
 
                     // remove any empty files
@@ -94,6 +90,10 @@ public class ApplicationExitMonitor {
 
                         //TODO: this part still gets all the system trace, we need to parse out just stack trace
                         if (null != exitInfo.getTraceInputStream()) {
+                            if(exitInfo.getReason() == ApplicationExitInfo.REASON_ANR){
+                                AEITrace aeiTrace = new AEITrace(artifact.getAbsolutePath());
+                            }
+
                             try (InputStream traceIs = exitInfo.getTraceInputStream()) {
                                 traceReport = Streams.slurpString(traceIs);
                             } catch (IOException e) {
