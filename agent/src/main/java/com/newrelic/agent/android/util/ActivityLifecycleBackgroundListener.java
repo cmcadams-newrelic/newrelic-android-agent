@@ -16,6 +16,7 @@ import com.newrelic.agent.android.logging.AgentLogManager;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
+@TargetApi(14)
 public class ActivityLifecycleBackgroundListener extends UiBackgroundListener implements Application.ActivityLifecycleCallbacks {
 
     private static final AgentLog log = AgentLogManager.getAgentLog();

@@ -69,7 +69,6 @@ import com.newrelic.agent.android.stores.SharedPrefsPayloadStore;
 import com.newrelic.agent.android.tracing.TraceMachine;
 import com.newrelic.agent.android.util.ActivityLifecycleBackgroundListener;
 import com.newrelic.agent.android.util.AndroidEncoder;
-import com.newrelic.agent.android.util.ComposeChecker;
 import com.newrelic.agent.android.util.Connectivity;
 import com.newrelic.agent.android.util.Encoder;
 import com.newrelic.agent.android.util.OfflineStorage;
@@ -515,10 +514,6 @@ public class AndroidAgentImpl implements
                 UserActionFacade.getInstance().recordUserAction(UserActionType.AppLaunch);
             }
 
-            //check if Compose is used for app or not
-            if(ComposeChecker.isComposeUsed(context)) {
-                StatsEngine.SUPPORTABILITY.inc(MetricNames.SUPPORTABILITY_MOBILE_ANDROID_JETPACK_COMPOSE);
-            }
 
         } else {
             stop(false);
