@@ -5,9 +5,14 @@
 
 package com.newrelic.agent.android.sessionReplay;
 
+import static com.newrelic.agent.android.util.Constants.SessionReplay.SESSION_ID;
+
 import com.newrelic.agent.android.Agent;
 import com.newrelic.agent.android.AgentConfiguration;
+import com.newrelic.agent.android.ApplicationFramework;
 import com.newrelic.agent.android.FeatureFlag;
+import com.newrelic.agent.android.analytics.AnalyticsAttribute;
+import com.newrelic.agent.android.analytics.AnalyticsControllerImpl;
 import com.newrelic.agent.android.harvest.DeviceInformation;
 import com.newrelic.agent.android.harvest.HarvestConfiguration;
 import com.newrelic.agent.android.metric.MetricNames;
@@ -17,9 +22,9 @@ import com.newrelic.agent.android.payload.PayloadReporter;
 import com.newrelic.agent.android.payload.PayloadSender;
 import com.newrelic.agent.android.stats.StatsEngine;
 import com.newrelic.agent.android.util.Constants;
-
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
@@ -32,6 +37,31 @@ public class SessionReplayReporter extends PayloadReporter {
     protected final SessionReplayStore sessionReplayStore;
     private Boolean isFirstChunk = true;
     private Boolean hasMeta = true;
+    static Map<String, Object> setCommonBlockAttributes(Map<String,Object> attributes) {
+        Map<String, Object> attr;
+        if (attributes.isEmpty()){
+            log.error("setCommonBlockAttributes called with empty attributes property");
+            attr = new HashMap<>();
+        } else {
+            attr = attributes;
+        }
+        attr.put(Constants.SessionReplay.InstrumentationDetails.PROVIDER, Constants.SessionReplay.InstrumentationDetails.PROVIDER_ATTRIBUTE);
+        attr.put(Constants.SessionReplay.InstrumentationDetails.NAME, AgentConfiguration.getInstance().getApplicationFramework().equals(ApplicationFramework.Native) ? Constants.SessionReplay.InstrumentationDetails.ANDROID_NAME : AgentConfiguration.getInstance().getApplicationFramework().name());
+        attr.put(Constants.SessionReplay.InstrumentationDetails.ENTITY_ATTRIBUTE, AgentConfiguration.getInstance().getEntityGuid());
+        attr.put(Constants.SessionReplay.InstrumentationDetails.VERSION, AgentConfiguration.getInstance().getApplicationFrameworkVersion());
+        attr.put(Constants.SessionReplay.InstrumentationDetails.COLLECTOR_NAME, Constants.SessionReplay.InstrumentationDetails.ANDROID_NAME);
+        attr.put(SESSION_ID, AgentConfiguration.getInstance().getSessionID());
+        // adding session attributes
+        final AnalyticsControllerImpl analyticsController = AnalyticsControllerImpl.getInstance();
+
+        Map<String, Object> sessionAttributes = new HashMap<>();
+        for (AnalyticsAttribute analyticsAttribute : analyticsController.getSessionAttributes()) {
+            sessionAttributes.put(analyticsAttribute.getName(), analyticsAttribute.asJsonElement());
+        }
+        attr.putAll(sessionAttributes);
+
+        return attr;
+    }
 
     protected final Callable reportCachedSessionReplayDataCallable = new Callable() {
         @Override
@@ -65,8 +95,9 @@ public class SessionReplayReporter extends PayloadReporter {
         boolean reported = false;
 
         if (isInitialized()) {
+            Map<String, Object> sessionReplayAttributes = setCommonBlockAttributes(attributes);
             Payload payload = new Payload(bytes);
-            instance.get().storeAndReportSessionReplayData(payload, attributes);
+            instance.get().storeAndReportSessionReplayData(payload, sessionReplayAttributes);
             reported = true;
         } else {
             log.error("SessionReplayDataReporter not initialized");

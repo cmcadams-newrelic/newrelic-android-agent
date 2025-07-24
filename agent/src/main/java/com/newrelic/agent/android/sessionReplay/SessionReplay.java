@@ -2,6 +2,8 @@ package com.newrelic.agent.android.sessionReplay;
 
 import static com.newrelic.agent.android.util.Constants.SessionReplay.FIRST_TIMESTAMP;
 import static com.newrelic.agent.android.util.Constants.SessionReplay.LAST_TIMESTAMP;
+import static com.newrelic.agent.android.util.Constants.SessionReplay.SESSION_ID;
+import static com.newrelic.agent.android.util.Constants.SessionReplay.InstrumentationDetails;
 
 import android.app.Application;
 import android.os.Handler;
@@ -12,6 +14,9 @@ import androidx.annotation.NonNull;
 
 import com.google.gson.Gson;
 import com.newrelic.agent.android.AgentConfiguration;
+import com.newrelic.agent.android.ApplicationFramework;
+import com.newrelic.agent.android.analytics.AnalyticsAttribute;
+import com.newrelic.agent.android.analytics.AnalyticsControllerImpl;
 import com.newrelic.agent.android.background.ApplicationStateEvent;
 import com.newrelic.agent.android.background.ApplicationStateListener;
 import com.newrelic.agent.android.harvest.Harvest;
@@ -41,6 +46,7 @@ public class SessionReplay implements OnFrameTakenListener, HarvestLifecycleAwar
     protected static final AgentLog log = AgentLogManager.getAgentLog();
     private final ArrayList<SessionReplayFrame> rawFrames = new ArrayList<>();
     private final ArrayList<RRWebEvent> rrWebEvents = new ArrayList<>();
+
 
     /**
      * Initializes the SessionReplay system.
