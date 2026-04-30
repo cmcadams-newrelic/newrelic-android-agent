@@ -732,7 +732,6 @@ public class AndroidAgentImpl implements
             try {
                 SessionReplayModeManager.getInstance().transitionTo(SessionReplayMode.FULL, "APIRecordReplay");
                 SessionReplay.initSessionReplay(SessionReplayMode.FULL);
-                AnalyticsControllerImpl.getInstance().setAttribute(AnalyticsAttribute.SESSION_REPLAY_ENABLED, true);
                 activateLoggingForSessionReplay();
                 log.info("recordReplay: SessionReplay initialized in FULL mode");
                 return true;
@@ -754,7 +753,6 @@ public class AndroidAgentImpl implements
                 // Transition from ERROR to FULL
                 boolean modeChanged = SessionReplay.switchModeOnError();
                 if (modeChanged) {
-                    AnalyticsControllerImpl.getInstance().setAttribute(AnalyticsAttribute.SESSION_REPLAY_ENABLED, true);
                     activateLoggingForSessionReplay();
                     log.info("recordReplay: Transitioned from ERROR to FULL mode");
                     return true;
