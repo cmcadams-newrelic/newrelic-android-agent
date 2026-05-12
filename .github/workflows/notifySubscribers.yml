@@ -6,14 +6,14 @@ name: Notify mobile agent subscribers of release
 # or API.
 on:
   workflow_run:
-    workflow: 'Release'
+    workflows: ['Release']
     types: ['completed']
-  workflow_dispatch:
-    # Inputs the workflow accepts.
-    inputs:
-      name:
-        # Friendly description to be shown in the UI instead of 'name'
-        description: 'Notify mobile agent subscribers'
+  # workflow_dispatch:
+  #   # Inputs the workflow accepts.
+  #   inputs:
+  #     name:
+  #       # Friendly description to be shown in the UI instead of 'name'
+  #       description: 'Notify mobile agent subscribers'
 
 permissions:
   # This permission is needed so that git tags can be created.
@@ -24,10 +24,12 @@ permissions:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   notify:
+    environment: dev
     runs-on: ubuntu-latest
-     - name: Notify Slack Channel
-       id: notify
-       run: |
+    steps:
+    - name: Notify Slack Channel
+      id: notify
+      run: |
          curl -X POST -H 'Content-type: application/json' \
          --data 'The Android mobile agent has created a new release candidate ${{steps.create_release.outputs.html_url}}' \
          'https://hooks.slack.com/services/${{secrets.SLACK_WEBHOOK_TOKEN}}'
