@@ -1,8 +1,8 @@
 # This is a basic workflow that is manually triggered
 
-name: Notify mobile agent subscribers of release
+name: Notify_subscribers
 
-# Controls when the action will run. Workflow runs when manually triggered using the UI
+# Controls when the action will run. Using workflow_dispatch runs when manually triggered using the UI
 # or API.
 on:
   workflow_run:
