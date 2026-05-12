@@ -31,5 +31,5 @@ jobs:
       id: notify
       run: |
          curl -X POST -H 'Content-type: application/json' \
-         --data 'The Android mobile agent has created a new release candidate ${{steps.create_release.outputs.html_url}}' \
+         --data ':::TESTING PLEASE IGNORE::: The Android mobile agent has created a new release candidate ${{github.events.workflow_run.html_url}}' \
          'https://hooks.slack.com/services/${{secrets.SLACK_WEBHOOK_TOKEN}}'
