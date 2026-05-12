@@ -1,6 +1,7 @@
 # This is a basic workflow that is manually triggered
 
 name: Notify mobile agent subscribers of release
+environment: dev
 
 # Controls when the action will run. Workflow runs when manually triggered using the UI
 # or API.
@@ -8,12 +9,12 @@ on:
   workflow_run:
     workflow: 'Release'
     types: ['completed']
-  workflow_dispatch:
-    # Inputs the workflow accepts.
-    inputs:
-      name:
-        # Friendly description to be shown in the UI instead of 'name'
-        description: 'Notify mobile agent subscribers'
+  # workflow_dispatch:
+  #   # Inputs the workflow accepts.
+  #   inputs:
+  #     name:
+  #       # Friendly description to be shown in the UI instead of 'name'
+  #       description: 'Notify mobile agent subscribers'
 
 permissions:
   # This permission is needed so that git tags can be created.
