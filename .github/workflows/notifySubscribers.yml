@@ -5,10 +5,10 @@ name: Notify mobile agent subscribers of release
 # Controls when the action will run. Workflow runs when manually triggered using the UI
 # or API.
 on:
-  # workflow_run:
-  #   workflow: 'Release'
-  #   types:
-  #     - completed
+  workflow_run:
+    workflow: 'Release'
+    types:
+      - completed
   workflow_dispatch:
     # Inputs the workflow accepts.
     inputs:
@@ -26,10 +26,6 @@ permissions:
 jobs:
   notify:
     runs-on: ubuntu-latest
-    steps:
-     - name: Create release
-       uses: actions/create-release@v1
-       id: create_release
      - name: Notify Slack Channel
        id: notify
        run: |
