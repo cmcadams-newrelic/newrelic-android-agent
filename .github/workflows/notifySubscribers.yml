@@ -34,7 +34,8 @@ jobs:
       - name: print events object
         run:  |
           echo -e "GITHUB OBJECT: ${{ toJSON(github) }}\n\n"
-          echo "FINDME: https://github.com/${{github.repository}}/releases/${{github.workflow_run.head_branch}}"
+          echo -e "====END======== \n \n \n"
+          echo "https://github.com/${{github.repository}}/releases/tag/${{github.workflow_run.head_branch}}"
 
       # - name: Test
       #   id: test-notify
