@@ -5,6 +5,7 @@ name: Notify_subscribers
 # Controls when the action will run. Using workflow_dispatch runs when manually triggered using the UI
 # or API.
 on:
+  # # This will not work for drafted PRs
   # release:
   #   types: ['created']
 
@@ -31,17 +32,19 @@ jobs:
     environment: dev
     runs-on: ubuntu-latest
     steps:
-      - name: print events object
+      - name: print GH events object
         run:  |
           echo -e "GITHUB OBJECT: ${{ toJSON(github) }}\n\n"
           echo -e "====END======== \n \n \n"
-          echo "https://github.com/${{github.repository}}/releases/tag/${{github.workflow_run.head_branch}}"
-
-      # - name: Test
-      #   id: test-notify
-        # include conditional to only do think on success
-    # - name: Notify Slack Channel
-    #   id: notify
+      - name: Print latest release url
+        id: set RELEASE_NAME
+        run:  |
+          RELEASE_NAME="https://github.com/${{github.repository}}/releases/tag/${{github.workflow_run.head_branch}}"
+          echo $RELEASE_NAME
+      - name: Notify Slack Channel
+        id: notify
+        run: |
+          echo -e "is release name set? ${RELEASE_NAME}"
     #   run: |
     #      curl -X POST -H 'Content-type: application/json' \
     #      --data '{"text": ":::TESTING PLEASE IGNORE::: The Android mobile agent has created a new release candidate ${{github.events.workflow_run.html_url}}"}' \
