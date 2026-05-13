@@ -32,7 +32,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name:
+        # id: 7.7.3-TEST32
         run:  echo ${{ toJSON(github.event) }}
+        run: echo ${{github.event.workflow_run.release_url}}/latest
       # - name: Test
       #   id: test-notify
         # include conditional to only do think on success
