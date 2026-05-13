@@ -39,9 +39,7 @@ jobs:
       - name: Print latest release url
         id: set_RELEASE_NAME
         run:  |
-          
-          echo "LATEST_RELEASE_URL='https://github.com/${{github.repository}}/releases/tag/${{github.event.workflow_run.head_branch}}'" >> "$GITHUB_ENV"
-          
+          echo "LATEST_RELEASE_URL=https://github.com/${{github.repository}}/releases/tag/${{github.event.workflow_run.head_branch}}" >> "$GITHUB_ENV"
       - name: Notify Slack Channel
         id: notify
         run: |
