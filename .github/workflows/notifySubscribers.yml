@@ -37,7 +37,7 @@ jobs:
           echo -e "GITHUB OBJECT: ${{ toJSON(github) }}\n\n"
           echo -e "====END======== \n \n \n"
       - name: Print latest release url
-        id: set RELEASE_NAME
+        id: set_RELEASE_NAME
         run:  |
           RELEASE_NAME="https://github.com/${{github.repository}}/releases/tag/${{github.workflow_run.head_branch}}"
           echo $RELEASE_NAME
