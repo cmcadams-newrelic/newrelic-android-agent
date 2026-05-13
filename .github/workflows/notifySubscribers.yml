@@ -35,7 +35,7 @@ jobs:
         # id: 7.7.3-TEST32
         run:  |
           echo -e "${{ toJSON(github.event.workflow_run) }}\n\n"
-          echo ${{github.event.workflow_run.release_url}}/latest
+          echo ${{github.event.workflow_run.releases_url}}/latest
       # - name: Test
       #   id: test-notify
         # include conditional to only do think on success
