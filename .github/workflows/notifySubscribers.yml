@@ -31,9 +31,7 @@ jobs:
     environment: dev
     runs-on: ubuntu-latest
     steps:
-      - name:
-        with:
-          id: 'latest'
+      - name: print events object
         run:  |
           echo -e "${{ toJSON(github.event.workflow_run) }}\n\n"
           echo ${{github.event.workflow_run.repository.releases_url}}
