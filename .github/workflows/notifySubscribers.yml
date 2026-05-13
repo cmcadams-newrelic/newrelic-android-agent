@@ -7,9 +7,11 @@ name: Notify_subscribers
 on:
   release:
     types: ['created']
+
   # workflow_run:
   #   workflows: ['Release']
   #   types: ['completed']
+
   # workflow_dispatch:
   #   # Inputs the workflow accepts.
   #   inputs:
@@ -34,7 +36,7 @@ jobs:
 
         # include conditional to only do think on success
         run: |
-          echo ${{github.event.release.html_url}}
+          echo ${{github.event.release.release.assets}}
     # - name: Notify Slack Channel
     #   id: notify
     #   run: |
