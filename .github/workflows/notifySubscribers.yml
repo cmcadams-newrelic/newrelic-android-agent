@@ -28,13 +28,12 @@ permissions:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   notify:
-    with:
-      id: 'latest'
     environment: dev
     runs-on: ubuntu-latest
     steps:
       - name:
-        id: 'latest'
+        with:
+          id: 'latest'
         run:  |
           echo -e "${{ toJSON(github.event.workflow_run) }}\n\n"
           echo ${{github.event.workflow_run.repository.releases_url}}
