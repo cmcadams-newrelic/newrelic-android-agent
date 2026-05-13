@@ -36,7 +36,8 @@ jobs:
 
         # include conditional to only do think on success
         run: |
-          echo ${{github.event.release.release.assets}}
+          echo ${{ github.event.release.release.assets }}
+          echo ${{ github.event.release }}
     # - name: Notify Slack Channel
     #   id: notify
     #   run: |
