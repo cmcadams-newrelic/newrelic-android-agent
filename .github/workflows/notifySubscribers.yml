@@ -36,6 +36,8 @@ jobs:
 
         # include conditional to only do think on success
         run: |
+          echo ${{ github.event.workflow_run.actor }}
+          echo ${{ github.event.workflow_run.repository }}
           echo ${{ github.event.workflow_run.repository.release_url }}
     # - name: Notify Slack Channel
     #   id: notify
