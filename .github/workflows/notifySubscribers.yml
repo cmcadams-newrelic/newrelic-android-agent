@@ -32,9 +32,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: print events object
+        env:
+          id: 'latest'
         run:  |
           echo -e "${{ toJSON(github.event.workflow_run) }}\n\n"
-          echo ${{github.event.workflow_run.repository.releases_url}}
+          TEST="${github.event.workflow_run.repository.releases_url/id/123}"
+          echo $TEST
       # - name: Test
       #   id: test-notify
         # include conditional to only do think on success
