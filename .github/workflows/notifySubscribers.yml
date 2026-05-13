@@ -32,7 +32,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name:
-        # id: 7.7.3-TEST32
+        id: 'latest'
         run:  |
           echo -e "${{ toJSON(github.event.workflow_run) }}\n\n"
           echo "${{github.event.workflow_run.repository.releases_url}}/latest"
