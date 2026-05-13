@@ -30,9 +30,10 @@ jobs:
   notify:
     environment: dev
     runs-on: ubuntu-latest
+    with:
+      id: 'latest'
     steps:
       - name:
-        id: 'latest'
         run:  |
           echo -e "${{ toJSON(github.event.workflow_run) }}\n\n"
           echo "${{github.event.workflow_run.repository.releases_url}}/latest"
