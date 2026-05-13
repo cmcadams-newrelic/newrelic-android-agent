@@ -31,15 +31,13 @@ jobs:
     environment: dev
     runs-on: ubuntu-latest
     steps:
+      - env:
+        EVENT_CONTEXT:  ${{ toJSON(github.event) }}
       - name: Test
         id: test-notify
-
         # include conditional to only do think on success
         run: |
-          echo "release_url: ${{ github.event.release.html_url }}"
-          echo "actor: ${{ github.event.release.actor }}"
-          echo "body: ${{ github.event.release.body }}"
-          #
+          echo $EVENT_CONTEXT
     # - name: Notify Slack Channel
     #   id: notify
     #   run: |
