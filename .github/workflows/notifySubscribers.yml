@@ -35,7 +35,7 @@ jobs:
         id: 'latest'
         run:  |
           echo -e "${{ toJSON(github.event.workflow_run) }}\n\n"
-          echo "${{github.event.workflow_run.repository.releases_url}}/latest"
+          echo ${{github.event.workflow_run.repository.releases_url}}
       # - name: Test
       #   id: test-notify
         # include conditional to only do think on success
