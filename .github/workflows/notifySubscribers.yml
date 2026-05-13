@@ -5,12 +5,12 @@ name: Notify_subscribers
 # Controls when the action will run. Using workflow_dispatch runs when manually triggered using the UI
 # or API.
 on:
-  release:
-    types: ['created']
+  # release:
+  #   types: ['created']
 
-  # workflow_run:
-  #   workflows: ['Release']
-  #   types: ['completed']
+  workflow_run:
+    workflows: ['Release']
+    types: ['completed']
 
     # workflow_dispatch:
   #   # Inputs the workflow accepts.
@@ -31,13 +31,11 @@ jobs:
     environment: dev
     runs-on: ubuntu-latest
     steps:
-      - env:
-        EVENT_CONTEXT:  ${{ toJSON(github.event) }}
-      - name: Test
-        id: test-notify
+      - name:
+        run:  echo ${{ toJSON(github.event) }}
+      # - name: Test
+      #   id: test-notify
         # include conditional to only do think on success
-        run: |
-          echo $EVENT_CONTEXT
     # - name: Notify Slack Channel
     #   id: notify
     #   run: |
