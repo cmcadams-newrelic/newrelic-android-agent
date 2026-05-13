@@ -35,9 +35,11 @@ jobs:
         env:
           id: 'latest'
         run:  |
-          echo -e "${{ toJSON(github.event.workflow_run) }}\n\n"
+          echo -e "${{ toJSON(github) }}\n\n"
           TEST="${github.event.workflow_run.repository.releases_url/id/123}"
-          echo $TEST
+          echo "findme $TEST"
+          echo "https://github.com/${{github.repository}}/releases/${{github.workflow_run.head_branch}}"
+
       # - name: Test
       #   id: test-notify
         # include conditional to only do think on success
