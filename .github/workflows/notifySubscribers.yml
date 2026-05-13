@@ -34,7 +34,7 @@ jobs:
       - name:
         # id: 7.7.3-TEST32
         run:  |
-          echo ${{ toJSON(github.event) }}
+          echo -e "${{ toJSON(github.event.workflow_run) }}\n\n"
           echo ${{github.event.workflow_run.release_url}}/latest
       # - name: Test
       #   id: test-notify
