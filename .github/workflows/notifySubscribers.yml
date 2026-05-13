@@ -32,13 +32,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: print events object
-        env:
-          id: 'latest'
         run:  |
-          echo -e "${{ toJSON(github) }}\n\n"
-          TEST="${github.event.workflow_run.repository.releases_url/id/123}"
-          echo "findme $TEST"
-          echo "https://github.com/${{github.repository}}/releases/${{github.workflow_run.head_branch}}"
+          echo -e "GITHUB OBJECT: ${{ toJSON(github) }}\n\n"
+          echo "FINDME: https://github.com/${{github.repository}}/releases/${{github.workflow_run.head_branch}}"
 
       # - name: Test
       #   id: test-notify
