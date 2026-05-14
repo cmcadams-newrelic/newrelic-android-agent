@@ -39,7 +39,7 @@ jobs:
       - name: Get Latest Release URL
         id: get_url
         run: |
-          URL=$(gh release view --json url --template '{{.url}}')
+          URL=$(gh release view --repo ${{github.repository}} --json url)
           echo "RELEASE_URL=$URL" >> $GITHUB_OUTPUT
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
