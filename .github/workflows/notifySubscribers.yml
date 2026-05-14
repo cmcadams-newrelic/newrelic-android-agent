@@ -36,12 +36,21 @@ jobs:
         run:  |
           echo -e "GITHUB OBJECT: ${{ toJSON(github) }}\n\n"
           echo -e "====END======== \n \n \n"
+      - name: Get Latest Release URL
+        id: get_url
+        run: |
+          URL=$(gh release view --json url --template '{{.url}}')
+          echo "RELEASE_URL=$URL" >> $GITHUB_OUTPUT
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Print latest release url
         id: set_RELEASE_NAME
         # github.event.workflow_run.head_branch will be the tag used when
         # running the create_release.yml workflow.
         run:  |
           echo "LATEST_RELEASE_URL=https://github.com/${{github.repository}}/releases/tag/${{github.event.workflow_run.head_branch}}" >> "$GITHUB_ENV"
+          echo "URL is ${{ steps.get_url.outputs.RELEASE_URL }}"
 
       - name: Notify Slack Channel
         id: notify
