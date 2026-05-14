@@ -38,12 +38,10 @@ jobs:
           echo -e "====END======== \n \n \n"
       - name: Print latest release url
         id: set_RELEASE_NAME
+        # github.event.workflow_run.head_branch will be the tag used when
+        # running the create_release.yml workflow.
         run:  |
           echo "LATEST_RELEASE_URL=https://github.com/${{github.repository}}/releases/tag/${{github.event.workflow_run.head_branch}}" >> "$GITHUB_ENV"
-
-          # TODO: use sed to update the release_url
-          RELEASE_URL=$(echo '${{github.event.workflow_run.repository.releases_url}}' | sed -E "s/{\/id}/${{github.event.workflow_run.head_branch}}/") >> "$GITHUB_ENV"
-
 
       - name: Notify Slack Channel
         id: notify
