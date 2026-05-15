@@ -1,7 +1,11 @@
 on:
-  push:
-    branches:
-      - Release
+  # push:
+  #   branches:
+  #     - Release
+  workflow_dispatch:
+    inputs:
+      name:
+        description:
 
 permissions:
   contents: write
