@@ -1,7 +1,8 @@
 on:
   push:
     branches:
-      - release
+      - main
+
   workflow_dispatch:
     inputs:
       name:
