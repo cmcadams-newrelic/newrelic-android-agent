@@ -1,0 +1,1 @@
+/Users/cmcadams/Repos/claude-files/newrelic-android-agent/CLAUDE.md

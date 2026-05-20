@@ -6,12 +6,12 @@ name: Notify_subscribers
 # or API.
 on:
   # # This will not work for drafted PRs
-  # release:
-  #   types: ['created']
+  release:
+    types: ['created']
 
-  workflow_run:
-    workflows: ['Release']
-    types: ['completed']
+  # workflow_run:
+  #   workflows: ['Release']
+  #   types: ['completed']
 
     # workflow_dispatch:
   #   # Inputs the workflow accepts.
