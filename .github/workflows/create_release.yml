@@ -10,6 +10,7 @@ permissions:
 
 jobs:
   release:
+    environment: dev
     runs-on: ubuntu-latest
     steps:
     - name: Checkout code
@@ -32,4 +33,4 @@ jobs:
         body: |
             ${{ steps.Changelog.outputs.changelog }}
       env:
-        GITHUB_TOKEN: ${{ github.token }}
+        GITHUB_TOKEN: ${{ secrets.token }}
