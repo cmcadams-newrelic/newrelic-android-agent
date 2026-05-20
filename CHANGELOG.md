@@ -1,5 +1,12 @@
 # Changelog
 
+## [7.8.1](https://github.com/cmcadams-newrelic/newrelic-android-agent/compare/v7.8.0...v7.8.1) (2026-05-20)
+
+
+### Bug Fixes
+
+* Update local configuration defaults and masking logic tests ([a548d62](https://github.com/cmcadams-newrelic/newrelic-android-agent/commit/a548d626f29f4d50ca5156f233a2a7d794add326))
+
 ## [7.8.0](https://github.com/cmcadams-newrelic/newrelic-android-agent/compare/v7.7.2...v7.8.0) (2026-05-20)
 
 
