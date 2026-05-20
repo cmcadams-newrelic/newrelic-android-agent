@@ -9,9 +9,9 @@ on:
   # release:
   #   types: ['created']
 
-  workflow_run:
-    workflows: ['Release']
-    types: ['completed']
+  # workflow_run:
+  #   workflows: ['Release']
+  #   types: ['completed']
 
     # workflow_dispatch:
   #   # Inputs the workflow accepts.
@@ -19,6 +19,9 @@ on:
   #     name:
   #       # Friendly description to be shown in the UI instead of 'name'
   #       description: 'Notify mobile agent subscribers'
+  pull-request:
+    types: [closed]
+    branches: main
 
 permissions:
   # This permission is needed so that git tags can be created.
@@ -29,6 +32,7 @@ permissions:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   notify:
+    if: github.event.pull_request.merge == true
     environment: dev
     runs-on: ubuntu-latest
     steps:
