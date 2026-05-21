@@ -45,7 +45,7 @@ jobs:
         id: notify
         run: |
 
-          # Debug workflow without actually notifying
+    # Debug workflow without actually notifying
           echo -e "is release name set? $LATEST_RELEASE_URL"
           echo -e "is release name set? $RELEASE_URL"
     #   run: |
