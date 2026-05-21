@@ -1,34 +1,45 @@
+name: release-please
+
 on:
   push:
     branches:
+      - main
       - 'release/**'
-    branches-ignore:
-      - 'release/**-*'
-
-
-  workflow_dispatch:
-    inputs:
-      name:
-        description:
 
 permissions:
   contents: write
-  issues: write
   pull-requests: write
-
-name: release-please
+  issues: write
 
 jobs:
   release-please:
-    environment: dev
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+
+      - name: Strip -SNAPSHOT on main branch
+        if: startsWith(github.ref, 'refs/heads/main')
+        run: |
+          set -euo pipefail
+          file=gradle.properties
+          if grep -qE '^newrelic\.agent\.version\s*=\s*[0-9]+\.[0-9]+\.[0-9]+-SNAPSHOT' "$file"; then
+            sed -i -E 's/^(newrelic\.agent\.version\s*=\s*[0-9]+\.[0-9]+\.[0-9]+)-SNAPSHOT/\1/' "$file"
+            git config user.name  "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add "$file"
+            git commit -m "chore: strip -SNAPSHOT for release ${GITHUB_REF_NAME}"
+            git push origin "HEAD:${GITHUB_REF_NAME}"
+            echo "Stripped -SNAPSHOT and pushed; the resulting push will re-run this workflow."
+            exit 0
+          fi
+          echo "No -SNAPSHOT to strip."
+
       - uses: googleapis/release-please-action@v4
         with:
-          # this assumes that you have created a personal access token
-          # (PAT) and configured it as a GitHub action secret named
-          # `MY_RELEASE_PLEASE_TOKEN` (this secret name is not important).
           token: ${{ secrets.GITHUB_TOKEN }}
-          # this is a built-in strategy in release-please, see "Action Inputs"
-          # for more options
-          release-type: simple
+          target-branch: ${{ github.ref_name }}
+          config-file: release-please-config.json
+          manifest-file: .release-please-manifest.json
