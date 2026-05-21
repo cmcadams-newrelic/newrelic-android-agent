@@ -1,7 +1,9 @@
 on:
   push:
     branches:
-      - develop
+      - 'release/**'
+      - '!release/**-*'
+
 
   workflow_dispatch:
     inputs:
