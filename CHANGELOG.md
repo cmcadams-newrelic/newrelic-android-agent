@@ -1,5 +1,13 @@
 # Changelog
 
+## [7.9.1](https://github.com/cmcadams-newrelic/newrelic-android-agent/compare/7.9.0...7.9.1) (2026-05-27)
+
+
+### Bug Fixes
+
+* create_release ([4e544d0](https://github.com/cmcadams-newrelic/newrelic-android-agent/commit/4e544d085a86a221529c07432a9baad069d775e9))
+* Name of task in release-please ([856bbc7](https://github.com/cmcadams-newrelic/newrelic-android-agent/commit/856bbc7a123450e5040c207b0325007a18e19cab))
+
 ## [7.9.0](https://github.com/cmcadams-newrelic/newrelic-android-agent/compare/7.8.0...7.9.0) (2026-05-27)
 
 
