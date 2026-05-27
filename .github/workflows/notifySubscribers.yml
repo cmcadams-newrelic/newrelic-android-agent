@@ -7,7 +7,7 @@ name: Notify_subscribers
 on:
   # # This will not work for drafted PRs
   release:
-    types: ['created', 'released', 'published']
+    types: ['released']
   workflow_dispatch:
 
 permissions:
@@ -40,7 +40,7 @@ jobs:
         # running the create_release.yml workflow.
         run:  |
           echo "LATEST_RELEASE_URL=https://github.com/${{github.repository}}/releases/tag/${{github.event.workflow_run.head_branch}}" >> "$GITHUB_ENV"
-          echo "URL is ${{ steps.get_url.outputs.RELEASE_URL }}"
+          echo "URL is '${{ steps.get_url.outputs.set_RELEASE_NAME }}'"
 
       - name: Notify Slack Channel
         id: notify
