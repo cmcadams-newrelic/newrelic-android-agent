@@ -7,7 +7,7 @@ name: Notify_subscribers
 on:
   # # This will not work for drafted PRs
   release:
-    types: ['created', 'published']
+    types: ['created', 'released', 'published']
 
 permissions:
   # This permission is needed so that git tags can be created.
