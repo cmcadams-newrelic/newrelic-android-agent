@@ -8,7 +8,7 @@ name: Notify_subscribers
 on:
   # # This will not work for drafted PRs
   release:
-    types: [published, edited, released]
+    types: [created, published, edited, released]
   workflow_dispatch:
     inputs:
       debug:
@@ -47,9 +47,9 @@ jobs:
       - name: DEBUG Notify Slack Channel
         id: notify
         if: ${{inputs.debug == false}}
-        run: echo -e "release name inits to... ${{steps.get_url.outputs.RELEASE_URL}}"
+        run: echo -e "The Android mobile agent team has released a new version of the agent ${{steps.get_url.outputs.RELEASE_URL.url}}"
     # change `run` to the below `run`
     #   run: |
     #      curl -X POST -H 'Content-type: application/json' \
-    #      --data '{"text": ":::TESTING PLEASE IGNORE::: The Android mobile agent has created a new release candidate $LATEST_RELEASE_URL"}' \
+    #      --data '{"text": "The Android mobile agent team has released a new version of the agent ${{steps.get_url.outputs.RELEASE_URL}}"}' \S
     #      'https://hooks.slack.com/services/${{secrets.SLACK_WEBHOOK_TOKEN}}'
