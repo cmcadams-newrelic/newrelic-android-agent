@@ -2,6 +2,7 @@
 
 name: Notify_subscribers
 
+
 # Controls when the action will run. Using workflow_dispatch runs when manually triggered using the UI
 # or API.
 on:
@@ -10,6 +11,11 @@ on:
     types: [published, edited, released]
   workflow_dispatch:
     inputs:
+      debug:
+        description: flag to set debug 
+        default: false
+        required: false
+        type: boolean
       tags:
         description: Tag to send notification about
         required: false
@@ -27,10 +33,6 @@ jobs:
     environment: dev
     runs-on: ubuntu-latest
     steps:
-      # - name: print GH events object
-      #   run:  |
-      #     echo -e "GITHUB OBJECT: ${{ toJSON(github) }}\n\n"
-      #     echo -e "====END======== \n \n \n"
       - name: Get Latest Release URL
         id: get_url
         run: |
@@ -38,35 +40,15 @@ jobs:
           echo "RELEASE_URL=$URL" >> $GITHUB_OUTPUT
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: set latest release url
-        id: set_RELEASE_NAME
-        # github.event.workflow_run.head_branch will be the tag used when
-        # running the create_release.yml workflow.
-        if: github.ref == 'refs/tags/*'
-        run:  |
-            echo "LATEST_RELEASE_URL=https://github.com/${{github.repository}}/releases/tag/${{github.ref_name}}" >> "$GITHUB_ENV"
-      # - name: set latest release url with workflow_run
-      #   id: set_RELEASE_NAME_with_workflow_run
-        # github.event.workflow_run.head_branch will be the tag used when
-        # running the create_release.yml workflow.
-        # if: github.ref == ''
-        # run:  |
-        #     echo "LATEST_RELEASE_URL=https://github.com/${{github.repository}}/releases/tag/${{github.ref_name}}" >> "$GITHUB_ENV"
-
-
-      - name: Gets Release Name
-        id: get_RELEASE_NAME
-        run: |
-          echo "LATEST_RELEASE_URL is '$LATEST_RELEASE_URL'"
-
-      - name: Notify Slack Channel
+      - name: DEBUG Notify Slack Channel
+        id: debug_notify
+        if: ${{inputs.debug == 'true'}}
+        run: echo -e "release name inits to... ${{steps.get_url.outputs.RELEASE_URL}}"
+      - name: DEBUG Notify Slack Channel
         id: notify
-        run: |
-
-          # Debug workflow without actually notifying
-          echo -e "release name inits to... ${{steps.get_url.outputs.RELEASE_URL}}"
-          echo -e "is release name set? $LATEST_RELEASE_URL"
+        if: ${{inputs.debug == 'false'}}
+        run: echo -e "release name inits to... ${{steps.get_url.outputs.RELEASE_URL}}"
+    # change `run` to the below `run`
     #   run: |
     #      curl -X POST -H 'Content-type: application/json' \
     #      --data '{"text": ":::TESTING PLEASE IGNORE::: The Android mobile agent has created a new release candidate $LATEST_RELEASE_URL"}' \
