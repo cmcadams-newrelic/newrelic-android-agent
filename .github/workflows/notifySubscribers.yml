@@ -9,6 +9,11 @@ on:
   release:
     types: ['released']
   workflow_dispatch:
+    inputs:
+      tags:
+        description: Tag to send notification about
+        required: false
+        type: string
 
 permissions:
   # This permission is needed so that git tags can be created.
