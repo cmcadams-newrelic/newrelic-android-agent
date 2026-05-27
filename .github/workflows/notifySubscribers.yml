@@ -7,8 +7,13 @@ name: Notify_subscribers
 on:
   # # This will not work for drafted PRs
   release:
-    types: ['released']
+    types: [published, edited, released]
   workflow_dispatch:
+    inputs:
+      tags:
+        description: Tag to send notification about
+        required: false
+        type: string
 
 permissions:
   # This permission is needed so that git tags can be created.
@@ -45,7 +50,7 @@ jobs:
       #   id: set_RELEASE_NAME_with_workflow_run
         # github.event.workflow_run.head_branch will be the tag used when
         # running the create_release.yml workflow.
-        # if: github.ref == '' 
+        # if: github.ref == ''
         # run:  |
         #     echo "LATEST_RELEASE_URL=https://github.com/${{github.repository}}/releases/tag/${{github.ref_name}}" >> "$GITHUB_ENV"
 
