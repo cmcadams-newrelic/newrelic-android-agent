@@ -1,5 +1,12 @@
 # Changelog
 
+## [7.13.1](https://github.com/cmcadams-newrelic/newrelic-android-agent/compare/7.13.0...7.13.1) (2026-05-27)
+
+
+### Bug Fixes
+
+* Updates message in notify subscribers ([655b733](https://github.com/cmcadams-newrelic/newrelic-android-agent/commit/655b73378036c7c42d90d8142371a1e9f2b10314))
+
 ## [7.13.0](https://github.com/cmcadams-newrelic/newrelic-android-agent/compare/7.12.0...7.13.0) (2026-05-27)
 
 
