@@ -34,21 +34,33 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Print latest release url
+      - name: set latest release url
         id: set_RELEASE_NAME
         # github.event.workflow_run.head_branch will be the tag used when
         # running the create_release.yml workflow.
+        if: github.ref == 'refs/tags/*'
         run:  |
-          echo "Start of URL is $RELEASE_URL"
-          echo "LATEST_RELEASE_URL=https://github.com/${{github.repository}}/releases/tag/${{github.event.workflow_run.head_branch}}" >> "$GITHUB_ENV"
-          echo "URL is '${{ steps.set_RELEASE_NAME.outputs.LATEST_RELEASE_URL }}'"
+            echo "LATEST_RELEASE_URL=https://github.com/${{github.repository}}/releases/tag/${{github.ref_name}}" >> "$GITHUB_ENV"
+      # - name: set latest release url with workflow_run
+      #   id: set_RELEASE_NAME_with_workflow_run
+        # github.event.workflow_run.head_branch will be the tag used when
+        # running the create_release.yml workflow.
+        # if: github.ref == '' 
+        # run:  |
+        #     echo "LATEST_RELEASE_URL=https://github.com/${{github.repository}}/releases/tag/${{github.ref_name}}" >> "$GITHUB_ENV"
+
+
+      - name: Gets Release Name
+        id: get_RELEASE_NAME
+        run: |
+          echo "LATEST_RELEASE_URL is '$LATEST_RELEASE_URL'"
 
       - name: Notify Slack Channel
         id: notify
         run: |
 
           # Debug workflow without actually notifying
-          echo -e "release name inits to... $RELEASE_URL"
+          echo -e "release name inits to... ${{steps.get_url.outputs.RELEASE_URL}}"
           echo -e "is release name set? $LATEST_RELEASE_URL"
     #   run: |
     #      curl -X POST -H 'Content-type: application/json' \
