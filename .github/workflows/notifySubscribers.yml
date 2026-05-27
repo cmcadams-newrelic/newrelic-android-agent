@@ -42,11 +42,11 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: DEBUG Notify Slack Channel
         id: debug_notify
-        if: ${{inputs.debug == 'true'}}
+        if: ${{inputs.debug == true}}
         run: echo -e "release name inits to... ${{steps.get_url.outputs.RELEASE_URL}}"
       - name: DEBUG Notify Slack Channel
         id: notify
-        if: ${{inputs.debug == 'false'}}
+        if: ${{inputs.debug == false}}
         run: echo -e "release name inits to... ${{steps.get_url.outputs.RELEASE_URL}}"
     # change `run` to the below `run`
     #   run: |
