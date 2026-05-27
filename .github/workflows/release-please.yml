@@ -38,6 +38,22 @@ jobs:
           fi
           echo "No -SNAPSHOT to strip."
 
+      - name: Strip -SNAPSHOT on main branch
+        if: startsWith(github.ref, 'refs/heads/release/**')
+        run: |
+          set -euo pipefail
+          file=gradle.properties
+          if grep -qE '^newrelic\.agent\.version\s*=\s*[0-9]+\.[0-9]+\.[0-9]+' "$file"; then
+            sed -i -E 's/^(newrelic\.agent\.version\s*=\s*[0-9]+\.[0-9]+\.[0-9]+)/\1-SNAPSHOT/' "$file"
+            git config user.name  "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add "$file"
+            git commit -m "chore: Includs -SNAPSHOT for release ${GITHUB_REF_NAME}"
+            git push origin "HEAD:${GITHUB_REF_NAME}"
+            echo "Includes -SNAPSHOT and pushed; the resulting push will re-run this workflow."
+            exit 0
+          fi
+          echo "-SNAPSHOT already exists in release branch."
       - uses: googleapis/release-please-action@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
