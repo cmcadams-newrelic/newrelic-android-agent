@@ -8,6 +8,7 @@ on:
   # # This will not work for drafted PRs
   release:
     types: ['created', 'released', 'published']
+  workflow_dispatch:
 
 permissions:
   # This permission is needed so that git tags can be created.
