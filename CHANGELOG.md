@@ -1,5 +1,13 @@
 # Changelog
 
+## [7.9.0](https://github.com/cmcadams-newrelic/newrelic-android-agent/compare/7.8.0...7.9.0) (2026-05-28)
+
+
+### Features
+
+* Include made up file ([e9b289f](https://github.com/cmcadams-newrelic/newrelic-android-agent/commit/e9b289f860022f13e6970163140ba28665c06423))
+* something new ([f264bf6](https://github.com/cmcadams-newrelic/newrelic-android-agent/commit/f264bf635ebaec5abb50de51e7541d1bbc4a08a2))
+
 ## [7.8.0](https://github.com/cmcadams-newrelic/newrelic-android-agent/compare/7.7.4...7.8.0) (2026-05-28)
 
 
