@@ -1,5 +1,12 @@
 # Changelog
 
+## [7.8.1](https://github.com/cmcadams-newrelic/newrelic-android-agent/compare/7.8.0...7.8.1) (2026-05-29)
+
+
+### Bug Fixes
+
+* naming file ([3a56544](https://github.com/cmcadams-newrelic/newrelic-android-agent/commit/3a565446c0fba93e1b7a49f72b78ca0bb4c23491))
+
 ## [7.8.0](https://github.com/cmcadams-newrelic/newrelic-android-agent/compare/7.7.4...7.8.0) (2026-05-29)
 
 
