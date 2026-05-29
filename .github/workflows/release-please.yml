@@ -23,23 +23,6 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           fetch-depth: 0
 
-      # - name: Strip -SNAPSHOT on MAIN branch
-      #   if: startsWith(github.ref, 'refs/heads/main')
-      #   run: |
-      #     set -euo pipefail
-      #     file=gradle.properties
-      #     if grep -qE '^newrelic\.agent\.version\s*=\s*[0-9]+\.[0-9]+\.[0-9]+-SNAPSHOT' "$file"; then
-      #       sed -i -E 's/^(newrelic\.agent\.version\s*=\s*[0-9]+\.[0-9]+\.[0-9]+)-SNAPSHOT/\1/' "$file"
-      #       git config user.name  "github-actions[bot]"
-      #       git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-      #       git add "$file"
-      #       git commit -m "chore: strip -SNAPSHOT for release ${GITHUB_REF_NAME}"
-      #       git push origin "HEAD:${GITHUB_REF_NAME}"
-      #       echo "Stripped -SNAPSHOT and pushed; the resulting push will re-run this workflow."
-      #       exit 0
-      #     fi
-      #     echo "No -SNAPSHOT to strip."
-
       - id: release-please
         uses: googleapis/release-please-action@v4
         with:
@@ -47,25 +30,3 @@ jobs:
           target-branch: ${{github.ref_name}}
           config-file: release-please-config.json
           manifest-file: .release-please-manifest.json
-
-      # - name: Add -SNAPSHOT on Release branch (post-release)
-      #   if: |
-      #     startsWith(github.ref, 'refs/heads/release/') &&
-      #     steps.release-please.outputs.release_created == 'true'
-      #   run: |
-      #     set -euo pipefail
-      #     # Pull the release commit that release-please just pushed,
-      #     # so we apply -SNAPSHOT on top of the released version.
-      #     git pull --ff-only origin "${GITHUB_REF_NAME}"
-      #     file=gradle.properties
-      #     if grep -qE '^newrelic\.agent\.version\s*=\s*[0-9]+\.[0-9]+\.[0-9]+\s*$' "$file"; then
-      #       sed -i -E 's/^(newrelic\.agent\.version\s*=\s*[0-9]+\.[0-9]+\.[0-9]+)\s*$/\1-SNAPSHOT/' "$file"
-      #       git config user.name  "github-actions[bot]"
-      #       git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-      #       git add "$file"
-      #       git commit -m "chore: include -SNAPSHOT after release ${{ steps.release-please.outputs.tag_name }}"
-      #       git push origin "HEAD:${GITHUB_REF_NAME}"
-      #       echo "Added -SNAPSHOT after release ${{ steps.release-please.outputs.tag_name }}."
-      #     else
-      #       echo "Version line not in expected format; skipping -SNAPSHOT add."
-      #     fi
