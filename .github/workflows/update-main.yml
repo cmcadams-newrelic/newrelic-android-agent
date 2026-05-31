@@ -27,6 +27,6 @@ jobs:
 
       - name: Fast-forward main to ${{ github.event.release.tag_name }}
         run: |
-          git fetch origin --tags --force
+          get fetch origin --tags
           git merge --ff-only "${{ github.event.release.tag_name }}"
           git push origin main
