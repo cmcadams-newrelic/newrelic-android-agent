@@ -75,6 +75,7 @@
 * **TicToc:** Correct duration calculation ([bd82eab](https://github.com/cmcadams-newrelic/newrelic-android-agent/commit/bd82eabd7294aaa32691fd6d27f0e1988f08a624))
 * unit test cases for CrashReporter ([718bcc1](https://github.com/cmcadams-newrelic/newrelic-android-agent/commit/718bcc12db1ff05fb4f58a171f5f46b79bdd9e89))
 * Unit test fail for Handled Exception Test ([#212](https://github.com/cmcadams-newrelic/newrelic-android-agent/issues/212)) ([da43628](https://github.com/cmcadams-newrelic/newrelic-android-agent/commit/da43628c5359d3e3fdc18278eab2e1ac032c1eb2))
+* update ([40d004e](https://github.com/cmcadams-newrelic/newrelic-android-agent/commit/40d004e665a2e16ae3f3447842a73714965c144e))
 * Update local configuration defaults and masking logic tests ([6b84cd9](https://github.com/cmcadams-newrelic/newrelic-android-agent/commit/6b84cd914e7d1ec99f11cbbe1dc3cff7e8f1c2e4))
 * update unit tests for native reporting ([#443](https://github.com/cmcadams-newrelic/newrelic-android-agent/issues/443)) ([411bbf2](https://github.com/cmcadams-newrelic/newrelic-android-agent/commit/411bbf232954abcdabaf72ac7b9ea3d725a800b2))
 * Updated max supported AGP Version ([#290](https://github.com/cmcadams-newrelic/newrelic-android-agent/issues/290)) ([370c2e3](https://github.com/cmcadams-newrelic/newrelic-android-agent/commit/370c2e330b619a74f20f5ee8b5306c6235ecbfda))
