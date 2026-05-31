@@ -21,10 +21,10 @@ jobs:
     environment: dev
     runs-on: ubuntu-latest
     steps:
-      - name: print GH events object
-        run:  |
-          echo -e "GITHUB OBJECT: ${{ toJSON(github) }}\n\n"
-          echo -e "====END======== \n \n \n"
+      # - name: print GH events object
+      #   run:  |
+      #     echo -e "GITHUB OBJECT: ${{ toJSON(github) }}\n\n"
+      #     echo -e "====END======== \n \n \n"
       - name: Get Latest Release URL
         id: get_url
         run: |
