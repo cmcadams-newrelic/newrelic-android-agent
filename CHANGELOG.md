@@ -1,5 +1,18 @@
 # Changelog
 
+## [7.13.0](https://github.com/cmcadams-newrelic/newrelic-android-agent/compare/7.12.0...7.13.0) (2026-05-31)
+
+
+### Features
+
+* Includes test-2 ([7dd9144](https://github.com/cmcadams-newrelic/newrelic-android-agent/commit/7dd9144fa0998d24ea66bdd948a9953dc18b54a2))
+
+
+### Bug Fixes
+
+* test ([63b25ed](https://github.com/cmcadams-newrelic/newrelic-android-agent/commit/63b25ed9a5f66481c2a5f94d7c8b2e9e8152baa2))
+* test ([33ca7c9](https://github.com/cmcadams-newrelic/newrelic-android-agent/commit/33ca7c9675c67901f0799b6172abfc83ac6a9d31))
+
 ## [7.12.0](https://github.com/cmcadams-newrelic/newrelic-android-agent/compare/7.11.0...7.12.0) (2026-05-31)
 
 
