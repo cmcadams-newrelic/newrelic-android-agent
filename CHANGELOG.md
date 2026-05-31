@@ -1,5 +1,13 @@
 # Changelog
 
+## [7.8.1](https://github.com/cmcadams-newrelic/newrelic-android-agent/compare/7.8.0...7.8.1) (2026-05-31)
+
+
+### Bug Fixes
+
+* clean up files ([2dc3bbc](https://github.com/cmcadams-newrelic/newrelic-android-agent/commit/2dc3bbc61144f7c6f89e6f30ac3cd0125e24a8dd))
+* fixing file ([f5a6cf4](https://github.com/cmcadams-newrelic/newrelic-android-agent/commit/f5a6cf44b8d946c4706c21cc70d9eadc04c5594b))
+
 ## [7.8.0](https://github.com/cmcadams-newrelic/newrelic-android-agent/compare/7.7.4...7.8.0) (2026-05-29)
 
 
