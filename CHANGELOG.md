@@ -1,5 +1,12 @@
 # Changelog
 
+## [7.15.1](https://github.com/cmcadams-newrelic/newrelic-android-agent/compare/7.15.0...7.15.1) (2026-05-31)
+
+
+### Bug Fixes
+
+* Uses gh vs actual git repo ([2c7d36a](https://github.com/cmcadams-newrelic/newrelic-android-agent/commit/2c7d36a8630835119c60e6f622f37c99772af985))
+
 ## [7.15.0](https://github.com/cmcadams-newrelic/newrelic-android-agent/compare/7.14.2...7.15.0) (2026-05-31)
 
 
