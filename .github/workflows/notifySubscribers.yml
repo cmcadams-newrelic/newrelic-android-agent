@@ -31,7 +31,7 @@ jobs:
           URL=$(gh release view --repo ${{github.repository}} --json url)
           echo "RELEASE_URL=$URL" >> $GITHUB_OUTPUT
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.RELEASE_BOT_PAT }}
 
       - name: Print latest release url
         id: set_RELEASE_NAME
