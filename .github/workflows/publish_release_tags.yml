@@ -1,0 +1,55 @@
+name: Publish Release Tags to New Relic
+
+on:
+  workflow_dispatch:
+
+jobs:
+  publish-tags:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Collect last 5 release tags
+        id: tags
+        run: |
+          tags=$(git tag --sort=-creatordate | head -5)
+          echo "Last 5 tags:"
+          echo "$tags"
+          payload="["
+          first=1
+          while IFS= read -r tag; do
+            [ -z "$tag" ] && continue
+            commit=$(git rev-list -n 1 "$tag")
+            ts=$(git log -1 --format=%ct "$tag")
+            if [ $first -eq 0 ]; then payload="$payload,"; fi
+            payload="$payload{\"eventType\":\"MobileRelease\",\"repository\":\"${GITHUB_REPOSITORY}\",\"tag\":\"$tag\",\"commit\":\"$commit\",\"tagTimestamp\":$((ts * 1000))}"
+            first=0
+          done <<< "$tags"
+          payload="$payload]"
+          echo "$payload" > payload.json
+          echo "payload<<EOF" >> "$GITHUB_OUTPUT"
+          echo "$payload" >> "$GITHUB_OUTPUT"
+          echo "EOF" >> "$GITHUB_OUTPUT"
+
+      - name: Send tags to New Relic Event API
+        env:
+          NR_ACCOUNT_ID: ${{ secrets.NR_ACCOUNT_ID }}
+          NR_LICENSE_KEY: ${{ secrets.NR_LICENSE_KEY }}
+        run: |
+          if [ -z "$NR_ACCOUNT_ID" ] || [ -z "$NR_LICENSE_KEY" ]; then
+            echo "Missing NR_ACCOUNT_ID or NR_LICENSE_KEY secret" >&2
+            exit 1
+          fi
+          http_code=$(curl -sS -o response.txt -w "%{http_code}" \
+            -X POST "https://insights-collector.newrelic.com/v1/accounts/${NR_ACCOUNT_ID}/events" \
+            -H "Content-Type: application/json" \
+            -H "Api-Key: ${NR_LICENSE_KEY}" \
+            --data-binary @payload.json)
+          echo "HTTP $http_code"
+          cat response.txt
+          if [ "$http_code" != "200" ]; then
+            exit 1
+          fi
