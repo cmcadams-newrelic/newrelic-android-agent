@@ -6,6 +6,18 @@ on:
   pull_request:
     branches: ["main", "release/*"]
   workflow_dispatch:
+  workflow_call:
+    inputs:
+      version:
+        description: 'Artifact version override (e.g. nightly build version)'
+        required: false
+        type: string
+        default: ''
+      ref:
+        description: 'Git ref to check out'
+        required: false
+        type: string
+        default: ''
 
 jobs:
   publish_release:
