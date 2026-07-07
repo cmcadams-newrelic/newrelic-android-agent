@@ -28,19 +28,24 @@ jobs:
       - name: Skip if no new commits since last nightly
         id: skip-check
         run: |
-          # LAST_NIGHTLY=$(git tag -l 'nightly-*' --sort=-version:refname | head -1)
-          # if [ -z "$LAST_NIGHTLY" ]; then
-          #   echo "skip=false" >> "$GITHUB_OUTPUT"
-          #   exit 0
-          # fi
-          # LAST_NIGHTLY_SHA=$(git rev-list -n 1 "$LAST_NIGHTLY")
-          # HEAD_SHA=$(git rev-parse HEAD)
-          # if [ "$LAST_NIGHTLY_SHA" = "$HEAD_SHA" ]; then
-          #   echo "No new commits since $LAST_NIGHTLY — skipping nightly."
-          #   echo "skip=true" >> "$GITHUB_OUTPUT"
-          # else
-          echo "skip=false" >> "$GITHUB_OUTPUT"
-          # fi
+          # should we tag another commit as a nightly build candidate?
+
+          LAST_NIGHTLY=$(git tag -l 'nightly-*' --sort=-version:refname | head -1)
+
+          if [ -z "$LAST_NIGHTLY" ]; then
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          LAST_NIGHTLY_SHA=$(git rev-list -n 1 "$LAST_NIGHTLY")
+          HEAD_SHA=$(git rev-parse HEAD)
+
+          if [ "$LAST_NIGHTLY_SHA" = "$HEAD_SHA" ]; then
+            echo "No new commits since $LAST_NIGHTLY — skipping nightly."
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          fi
 
       - name: Resolve version and date
         if: steps.skip-check.outputs.skip != 'true'
