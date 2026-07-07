@@ -15,10 +15,11 @@ jobs:
     name: Skip check and version resolution
     runs-on: ubuntu-latest
     outputs:
-      skip:            ${{ steps.skip-check.outputs.skip }}
-      date:            ${{ steps.vars.outputs.date }}
-      tag:             ${{ steps.vars.outputs.tag }}
-      head_sha:        ${{ steps.vars.outputs.head_sha }}
+      skip:             ${{ steps.skip-check.outputs.skip }}
+      date:             ${{ steps.vars.outputs.date }}
+      tag:              ${{ steps.vars.outputs.tag }}
+      head_sha:         ${{ steps.vars.outputs.head_sha }}
+      snapshot_version: ${{ steps.vars.outputs.snapshot_version }}
     steps:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
         with:
@@ -52,10 +53,8 @@ jobs:
         id: vars
         run: |
           DATE=$(date -u +%Y-%m-%d)
-          DATE_COMPACT=$(date -u +%Y%m%d)
           BASE_VERSION=$(grep '^newrelic\.agent\.version' gradle.properties \
             | sed 's/.*=\s*\([0-9][0-9.]*\).*/\1/')
-          echo "base_version=${BASE_VERSION}"                             >> "$GITHUB_OUTPUT"
           echo "date=${DATE}"                                             >> "$GITHUB_OUTPUT"
           echo "snapshot_version=${BASE_VERSION}-SNAPSHOT"                >> "$GITHUB_OUTPUT"
           echo "tag=nightly-${DATE}"                                      >> "$GITHUB_OUTPUT"
@@ -100,9 +99,8 @@ jobs:
           GH_TOKEN:        ${{ github.token }}
           TAG:             ${{ needs.prepare.outputs.tag }}
           DATE:            ${{ needs.prepare.outputs.date }}
-          HEAD_SHA:        ${{ needs.prepare.outputs.head_sha }}
-          BASE_VERSION:    ${{ needs.prepare.outputs.base_version }}
-          SNAPSHOT_VERSION:    ${{ needs.prepare.outputs.snapshot_version }}
+          HEAD_SHA:         ${{ needs.prepare.outputs.head_sha }}
+          SNAPSHOT_VERSION: ${{ needs.prepare.outputs.snapshot_version }}
         run: |
           {
             echo "Nightly pre-release from \`develop\` at commit \`${HEAD_SHA}\`."
