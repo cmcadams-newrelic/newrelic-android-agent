@@ -184,6 +184,7 @@ public class NativeReportingTest {
     }
 
     @Test
+    @Ignore("FIXME: AgentNDK.stop() is final; mockito-inline conflicts with Robolectric. See NativeReportingKotlinTest")
     public void stopSurvivesNdkAbiMismatch() {
         // Reproduces the runtime crash where the agent was compiled against an
         // AgentNDK.stop() with a different return-type descriptor than the agent-ndk
