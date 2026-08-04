@@ -19,6 +19,7 @@ import com.newrelic.agent.android.AgentConfiguration;
 import com.newrelic.agent.android.analytics.AnalyticsAttribute;
 import com.newrelic.agent.android.analytics.AnalyticsControllerImpl;
 import com.newrelic.agent.android.analytics.AnalyticsEvent;
+import com.newrelic.agent.android.background.ApplicationStateMonitor;
 import com.newrelic.agent.android.harvest.Harvest;
 import com.newrelic.agent.android.logging.AgentLog;
 import com.newrelic.agent.android.logging.AgentLogManager;
@@ -134,7 +135,7 @@ public class ApplicationExitMonitor {
     @SuppressLint("SwitchIntDef")
     @SuppressWarnings("deprecation")
     public void harvestApplicationExitInfo() {
-        sessionMapper.load();
+        sessionMapper.restore();
 
         // Only supported in Android 11+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
@@ -142,7 +143,7 @@ public class ApplicationExitMonitor {
             AtomicInteger recordsSkipped = new AtomicInteger(0);
             AtomicInteger recordsDropped = new AtomicInteger(0);
 
-            if (null == am) {
+            if (am == null) {
                 log.error("harvestApplicationExitInfo: ActivityManager is null! Cannot record ApplicationExitInfo data.");
                 return;
             }
@@ -245,7 +246,8 @@ public class ApplicationExitMonitor {
             }
             log.debug("AEI: inspected [" + applicationExitInfoList.size() + "] records: new[" + recordsVisited.get() + "] existing [" + recordsSkipped.get() + "] dropped[" + recordsDropped.get() + "]");
 
-            AEISessionMapper.AEISessionMeta model = new AEISessionMapper.AEISessionMeta(AgentConfiguration.getInstance().getSessionID(), Harvest.getHarvestConfiguration().getDataToken().getAgentId(), false);
+            // Is using the isAppinBackground correct? do we need the NOW or then?
+            AEISessionMapper.AEISessionMeta model = new AEISessionMapper.AEISessionMeta(AgentConfiguration.getInstance().getSessionID(), Harvest.getHarvestConfiguration().getDataToken().getAgentId(), ApplicationStateMonitor.isAppInBackground());
             sessionMapper.put(getCurrentProcessId(), model);
             sessionMapper.flush();
 

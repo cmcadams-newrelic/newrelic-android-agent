@@ -68,6 +68,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
+import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -77,6 +78,7 @@ import java.util.stream.Collectors;
 public class ApplicationExitMonitorTest {
     private AgentLog logger;
     private SpyContext spyContext;
+    private Random random;
 
     ApplicationExitMonitor applicationExitMonitor;
     ArrayList<ApplicationExitInfo> applicationExitInfoList;
@@ -646,9 +648,10 @@ public class ApplicationExitMonitorTest {
 
     void loadSessionMapper() {
         // seed the session mapper
+        random = new Random();
         applicationExitInfoList.forEach(aei ->
                 applicationExitMonitor.sessionMapper.mapper.putIfAbsent(aei.getPid(),
-                        new AEISessionMapper.AEISessionMeta(UUID.randomUUID().toString(), 1234, false))
+                        new AEISessionMapper.AEISessionMeta(UUID.randomUUID().toString(), 1234, random.nextBoolean()))
         );
         applicationExitMonitor.sessionMapper.flush();
     }

@@ -149,10 +149,6 @@ public class Error extends HarvestableObject {
         this.event = event;
     }
 
-    public boolean getIsObfuscated() {
-        return Agent.getIsObfuscated();
-    }
-
     public Set<AnalyticsAttribute> getErrorSessionAttributes(Set<AnalyticsAttribute> sessionAttributes) {
         if (sessionAttributes == null) {
             return null;

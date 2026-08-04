@@ -32,7 +32,7 @@ public class AEISessionMapper {
         this.mapStore = mapStore;
         this.mapper = new HashMap<>();
         if (mapStore.exists()) {
-            load();
+            restore();
         }
     }
 
@@ -66,15 +66,14 @@ public class AEISessionMapper {
                 ? defaultSessionId : model.sessionId;
     }
 
-    @SuppressWarnings("unchecked")
-    public void load() {
+    public void restore() {
         if (mapStore.exists() && mapStore.canRead()) {
             try {
                 String storeData = Streams.slurpString(mapStore, StandardCharsets.UTF_8.toString());
                 final Type gtype = new TypeToken<Map<Integer, AEISessionMeta>>(){}.getType();
-                Map map = gson.fromJson(storeData, gtype);
+                Map<Integer, AEISessionMeta> map = gson.fromJson(storeData, gtype);
 
-                map.forEach((key, val) -> mapper.putIfAbsent((Integer) key, (AEISessionMeta) val));
+                map.forEach(mapper::putIfAbsent);
 
             } catch (Exception e) {
                 AgentLogManager.getAgentLog().error("Cannot read session ID mapper: " + e);
