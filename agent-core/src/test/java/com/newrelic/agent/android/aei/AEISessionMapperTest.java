@@ -6,7 +6,6 @@
 package com.newrelic.agent.android.aei;
 
 import com.newrelic.agent.android.AgentConfiguration;
-import com.newrelic.agent.android.harvest.Harvest;
 import com.newrelic.agent.android.logging.AgentLog;
 import com.newrelic.agent.android.logging.AgentLogManager;
 import com.newrelic.agent.android.logging.ConsoleAgentLog;
@@ -43,9 +42,9 @@ public class AEISessionMapperTest {
         sessionMapperFile = new File(reportsDir, "sessionMapper");
         mapper = new AEISessionMapper(sessionMapperFile);
 
-        mapper.put(123, new AEISessionMapper.AEISessionMeta(UUID.randomUUID().toString(), 321));
-        mapper.put(234, new AEISessionMapper.AEISessionMeta(UUID.randomUUID().toString(), 432));
-        mapper.put(345, new AEISessionMapper.AEISessionMeta(UUID.randomUUID().toString(), 543));
+        mapper.put(123, new AEISessionMapper.AEISessionMeta(UUID.randomUUID().toString(), 321, false));
+        mapper.put(234, new AEISessionMapper.AEISessionMeta(UUID.randomUUID().toString(), 432, true));
+        mapper.put(345, new AEISessionMapper.AEISessionMeta(UUID.randomUUID().toString(), 543, false));
     }
 
     @After
@@ -60,7 +59,7 @@ public class AEISessionMapperTest {
 
     @Test
     public void put() {
-        mapper.put(6661, new AEISessionMapper.AEISessionMeta(AgentConfiguration.getInstance().getSessionID(), 1666));
+        mapper.put(6661, new AEISessionMapper.AEISessionMeta(AgentConfiguration.getInstance().getSessionID(), 1666, false));
         Assert.assertEquals(AgentConfiguration.getInstance().getSessionID(), mapper.getSessionId(6661));
         Assert.assertEquals(1666, mapper.getRealAgentID(6661));
     }
@@ -70,6 +69,11 @@ public class AEISessionMapperTest {
         Assert.assertNotNull(mapper.get(234));
         Assert.assertNull(mapper.get(456));
     }
+    @Test
+    public void getAppBackgrounded() {
+        Assert.assertTrue(mapper.getAppBackgrounded(432));
+        Assert.assertFalse(mapper.getAppBackgrounded(456));
+    }
 
     @Test
     public void getOrDefault() {
@@ -77,13 +81,13 @@ public class AEISessionMapperTest {
     }
 
     @Test
-    public void load() {
+    public void restore() {
         Assert.assertEquals(0, sessionMapperFile.length());
         mapper.flush();
         Assert.assertNotEquals(0, sessionMapperFile.length());
         mapper.clear();
         Assert.assertTrue(mapper.mapper.isEmpty());
-        mapper.load();
+        mapper.restore();
         Assert.assertFalse(mapper.mapper.isEmpty());
     }
 
@@ -123,7 +127,7 @@ public class AEISessionMapperTest {
         Assert.assertNotNull(mapper.get(234));
         Assert.assertNull(mapper.get(345));
 
-        mapper.put(456, new AEISessionMapper.AEISessionMeta(UUID.randomUUID().toString(), 654));
+        mapper.put(456, new AEISessionMapper.AEISessionMeta(UUID.randomUUID().toString(), 654, false));
         mapper.erase(pidSet);
         Assert.assertNotNull(mapper.get(456));
     }

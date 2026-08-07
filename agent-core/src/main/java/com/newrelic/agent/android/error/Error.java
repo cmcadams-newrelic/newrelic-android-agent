@@ -84,6 +84,13 @@ public class Error extends HarvestableObject {
 
         if (sessionMeta != null) {
             this.dataToken.setAgentId(sessionMeta.realAgentId);
+            if (FeatureFlag.featureEnabled(FeatureFlag.BackgroundReporting) && this.sessionAttributes != null) {
+                this.sessionAttributes.removeIf(attr -> AnalyticsAttribute.BACKGROUND_ATTRIBUTE_NAME.equals(attr.getName()));
+                if (sessionMeta.backgrounded) {
+                    this.sessionAttributes.add(new AnalyticsAttribute(AnalyticsAttribute.BACKGROUND_ATTRIBUTE_NAME, true));
+                    StatsEngine.notice().inc(MetricNames.BACKGROUND_CRASH_COUNT);
+                }
+            }
         }
     }
 
@@ -141,11 +148,9 @@ public class Error extends HarvestableObject {
     public void setAnalyticsEvents(HashMap<String, Object> event) {
         this.event = event;
     }
-
     public boolean getIsObfuscated() {
         return Agent.getIsObfuscated();
     }
-
     public Set<AnalyticsAttribute> getErrorSessionAttributes(Set<AnalyticsAttribute> sessionAttributes) {
         if (sessionAttributes == null) {
             return null;
