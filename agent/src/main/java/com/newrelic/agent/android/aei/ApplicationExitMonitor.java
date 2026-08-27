@@ -153,7 +153,6 @@ public class ApplicationExitMonitor {
                     am.getHistoricalProcessExitReasons(packageName, 0, 0);
 
             // the set may contain more than one report for this package name
-            AEISessionMapper.AEISessionMeta sessionMeta = null;
             for (ApplicationExitInfo exitInfo : applicationExitInfoList) {
                 File artifact = new File(reportsDir, String.format(Locale.getDefault(), ARTIFACT_NAME,
                         exitInfo.getPid()));
@@ -204,7 +203,7 @@ public class ApplicationExitMonitor {
                 }
 
                 // try to map the AEI with the session it occurred in
-                sessionMeta = sessionMapper.get(exitInfo.getPid());
+                AEISessionMapper.AEISessionMeta sessionMeta = sessionMapper.get(exitInfo.getPid());
                 if (sessionMeta != null) {
                     sessionMeta = new AEISessionMapper.AEISessionMeta(sessionMeta.sessionId, sessionMeta.realAgentId, isExitBackgrounded(exitInfo.getImportance()));
                 }

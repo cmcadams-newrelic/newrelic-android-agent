@@ -77,12 +77,6 @@ public class AEISessionMapperTest {
     }
 
     @Test
-    public void getAppBackgrounded() {
-        Assert.assertTrue(mapper.getAppBackgrounded(pids[1]));
-        Assert.assertFalse(mapper.getAppBackgrounded(456));
-    }
-
-    @Test
     public void getOrDefault() {
         Assert.assertNotNull(mapper.getOrDefault(456, UUID.randomUUID().toString()));
     }

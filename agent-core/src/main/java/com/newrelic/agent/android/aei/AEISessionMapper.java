@@ -55,10 +55,6 @@ public class AEISessionMapper {
         return model == null ? "" : model.sessionId;
     }
 
-    public boolean getAppBackgrounded(int pid) {
-        AEISessionMeta model = get(pid);
-        return model != null && model.backgrounded;
-    }
 
     public int getRealAgentID(int pid) {
         AEISessionMeta model = get(pid);
